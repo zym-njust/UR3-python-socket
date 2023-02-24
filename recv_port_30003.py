@@ -3,15 +3,17 @@ import struct
 import math
 import re, time
 import numpy as np
+import cv2
 
-HOST = "192.168.12.109"  # The remote host
-PORT = 30003  # The same port as used by the server
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((HOST, PORT))
+
 z = 0
-
+HOST = "169.254.71.1"  # The remote host
+PORT = 30003  # The same port as used by the server
 
 def main():
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((HOST, PORT))
 
     dic_UR3 = {'MessageSize': 'i', 'Time': 'd', 'q target': '6d', 'qd target': '6d', 'qdd target': '6d', 'I target': '6d',
            'M target': '6d', 'q actual': '6d', 'qd actual': '6d', 'I actual': '6d', 'I control': '6d',
@@ -40,27 +42,39 @@ def main():
         names.append(struct.unpack(fmt, data1))
         dic_UR3[key] = dic_UR3[key], struct.unpack(fmt, data1)
         
-    print("第{0:}次解析".format(z))
-    a = dic_UR3['q target']
-    print(a)
 
-  
+    a = dic_UR3['Tool vector actual']
+    b = dic_UR3['Tool vector target']
+    print('Tool vector actual: {} \n Tool vector target:{} \n'.format(a,b))
     # for key, value in dic.items():
     #     print(key, end=": ")
     #     print(value[1])
     # print()
-
-
+    
+def get_calib_data():
+    print()
+    
+def forward_kine():
+    print()
+    
+def handeye():
+    cv2.calibrateHandEye()
+    
+    
 if __name__ == '__main__':
-    main()
+    # main()
+    # exit()
     while True:
-        keyboard = input('input:')
-        if keyboard == 'a':
+        try:
+            # keyboard = input('input:')
+            # if keyboard == 'a':
             z = z + 1
+            #     main()
+            # elif keyboard == 'q':
+            #     print('--------------Over--------------')
+            #     break
             main()
-        elif keyboard == 'q':
-            print('--------------Over--------------')
+        except KeyboardInterrupt:
             break
-        time.sleep(1)
 
 

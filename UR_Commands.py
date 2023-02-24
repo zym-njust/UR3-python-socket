@@ -7,7 +7,7 @@
 import socket
 from time import sleep
 
-target_ip = ("192.168.12.109", 30003)  # 机械臂IP & 端口号
+target_ip = ("169.254.71.1", 30003)  # 机械臂IP & 端口号
 sk = socket.socket()  # 创建套接字
 sk.connect(target_ip)  # 连接
 

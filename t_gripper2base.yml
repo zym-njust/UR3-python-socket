@@ -1,0 +1,92 @@
+%YAML:1.0
+---
+TranslationVectors01: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -4.6654432620501132e+02, -1.0383147808028880e+02,
+       3.8761715273829918e+02 ]
+TranslationVectors02: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -4.3758237741018758e+02, -1.5072221134048456e+02,
+       3.9665901132838354e+02 ]
+TranslationVectors03: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -4.8674737620502003e+02, -1.0127214840769867e+02,
+       3.3795659447315575e+02 ]
+TranslationVectors04: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -4.8394809423125525e+02, -9.5755753207715742e+01,
+       4.1350626149498737e+02 ]
+TranslationVectors05: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -4.4205512087585271e+02, -9.3048317280581813e+01,
+       4.7766807951045627e+02 ]
+TranslationVectors06: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -4.5302656509459689e+02, -1.0623438810559750e+02,
+       4.6570759570884957e+02 ]
+TranslationVectors07: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -2.1894070492050639e+02, -9.3416481309608884e+01,
+       3.8329326322502891e+02 ]
+TranslationVectors08: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -4.9853938145111044e+02, 4.7733527875891753e+01,
+       3.0662789572461764e+02 ]
+TranslationVectors09: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -4.8952086556604564e+02, -7.8190975162677802e+01,
+       2.7828630006643840e+02 ]
+TranslationVectors10: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -3.9864162169931768e+02, -1.0062455890342569e+02,
+       4.2978090288061588e+02 ]
+TranslationVectors11: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -2.6843926059727153e+02, -1.4978490454245747e+02,
+       3.9067797969090032e+02 ]
+TranslationVectors12: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -2.7448033739511442e+02, -1.5857330780621507e+02,
+       3.8338000928891364e+02 ]
+TranslationVectors13: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -4.3141670621521644e+02, -1.2258381669009111e+02,
+       3.0137500761503429e+02 ]
+TranslationVectors14: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -2.9328160972421858e+02, -2.5111810463536989e+02,
+       4.0386080173034446e+02 ]
+TranslationVectors15: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -4.0863521449309832e+02, -1.0226319269477908e+02,
+       4.8900636137457633e+02 ]
