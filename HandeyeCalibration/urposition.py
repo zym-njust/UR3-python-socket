@@ -1,27 +1,28 @@
-from __future__ import print_function
+'''
+Date: 2023/3/9 first editing finished
+Author: Yiman Zhu
+Function: Take picture with camera and record the pose of robot, for handeye calibration
+
+'''
 import socket
 import struct
 import numpy as np
 import cv2
 import os
-from utils import *
 import pyrealsense2 as rs 
-from yaml_toolkit import *
+from toolkit.robot_toolkit import *
+from toolkit.yaml_toolkit import *
 import pdb
 
-
-
-# s1.startWriteStruct('Mapping', cv2.FileNode_MAP)
-# s2.startWriteStruct('Mapping', cv2.FileNode_MAP)
-
-HOST = "192.168.12.109"  # The remote host
-PORT = 30003  # The same port as used by the server
+# The remote host
+HOST = "192.168.12.109"  
+# The same port as used by the server
+PORT = 30003 
 
 # Declare pointcloud object, for calculating pointclouds and texture mappings
 pc = rs.pointcloud()
 # We want the points object to be persistent so we can display the last cloud when a frame drops
 points = rs.points()
-
 
 pipeline = rs.pipeline()
 config = rs.config()
@@ -54,45 +55,34 @@ def get_UR3_dict():
            'V robot': 'd', 'I robot': 'd', 'V actual': '6d', 'Digital outputs': 'd', 'Program state': 'd',
            'Elbow position': '3d', 'Elbow velocity': '3d', 'Safety Status': 'd','empty4':'d','empty5':'d','empty6':'d','Payload Mass':'d','Payload CoG':'3d','Payload Inertia':'6d'} # UR3 消息格式 {Type: i=int, d=double |  Number of values: 6d=6 double values}
     
-    data = s.recv(1220) # 1220 total size in bytes
+    data = s.recv(1220) 
+    # 1220 total size in bytes
     # 参考 https://blog.csdn.net/qq_42236622/article/details/121740703
 
     names = []
     ii = range(len(dic_UR3))
-    # print('ii:{}\n'.format(ii))
     for key, i in zip(dic_UR3, ii):
         fmtsize = struct.calcsize(dic_UR3[key])
-        # print('fmtsize:{}\n'.format(fmtsize))
         data1, data = data[0:fmtsize], data[fmtsize:]
-        # print('data1:{}\n'.format(data1))
-        # print('data:{}\n'.format(data))
-        
         fmt = "!" + dic_UR3[key]
         names.append(struct.unpack(fmt, data1))
         dic_UR3[key] = dic_UR3[key], struct.unpack(fmt, data1)
         
-    # print("第{0:}次解析".format(z))
 
     q = dic_UR3['q actual']
-    # b = dic_UR3['Tool vector target']
-    # print('Tool vector actual: {} \n Tool vector target:{} \n'.format(a,b))
     return q
      
 def main():
-    index = 1
-    n = 15
+    # 初始化，运行前请检查
+    index = 0  # 照片起始编号
+    n = 15     # sample个数
     filename1 = 'R_gripper2base.yml'
     filename2 = 't_gripper2base.yml'
     R_gripper2base = []
     t_gripper2base = []
-    # 写入yml文件
-    # s1 = cv2.FileStorage(filename1, cv2.FileStorage_WRITE)
-    # s2 = cv2.FileStorage(filename2, cv2.FileStorage_WRITE)
+
     while True:  
 
-        # 序号字符串
-        index0 = index%10
-        index1=int(index/10)%10
         # 相机当前帧
         frames = pipeline.wait_for_frames()
         color_frame = frames.get_color_frame()
@@ -102,9 +92,15 @@ def main():
         cv2.imshow('color_frame',img_color)
 
         # 按键
-        key = cv2.waitKey(1)
-        if key & 0xFF == ord('a'):
-            # 保存当前机械臂末端位姿
+        key_0 = cv2.waitKey(1)
+        # a----采集一次
+        if key_0 & 0xFF == ord('a'):
+            # 计数
+            index = index + 1
+            index0 = index%10
+            index1=int(index/10)%10
+            
+            # 计算当前机械臂末端位姿
             q = get_UR3_dict()
             q_type, q_vector = q[0], q[1]
             print('Pose {} ------------------------------------'.format(index))
@@ -113,32 +109,38 @@ def main():
             R, t = HTM2RT(homo)
             R_gripper2base.append(R)
             t_gripper2base.append(t)
-            # pdb.set_trace()
-            # 写入文件 
-            # s1 = cv2.FileStorage(filename1, cv2.FileStorage_WRITE)
-            # s2 = cv2.FileStorage(filename2, cv2.FileStorage_WRITE)
-            
-            
+
             # 保存当前帧标定板图像
+            
             cv2.imwrite(dir_root+'\\%s.jpg'%(str(index1)+str(index0)), img_color)
             print('R = {}   t = {}  \nImage Saved \n'.format(R, t))
-            # 计数
-            index = index + 1
-              
-        elif key & 0xFF == ord('q'):
+            
+        # q----结束      
+        elif key_0 & 0xFF == ord('q'):
             cv2.destroyAllWindows()
+            print('-----------采集结束----------')
             break
+    
+    # 输入
+    
+    key_1 = input('是否覆盖数据(y/n):')
+    # y----保存
+    if key_1 == 'y':
+        s1 = cv2.FileStorage(filename1, cv2.FileStorage_WRITE)
+        s2 = cv2.FileStorage(filename2, cv2.FileStorage_WRITE)
+        for i in range(n):
+            index = i+1
+            index0 = index%10
+            index1=int(index/10)%10
+            s1.write('RotationVectors%s'%(str(index1)+str(index0)), R_gripper2base[i])
+            s2.write('TranslationVectors%s'%(str(index1)+str(index0)), t_gripper2base[i])
+        s1.release()
+        s2.release()
         
-    s1 = cv2.FileStorage(filename1, cv2.FileStorage_WRITE)
-    s2 = cv2.FileStorage(filename2, cv2.FileStorage_WRITE)
-    for i in range(n):
-        index = i+1
-        index0 = index%10
-        index1=int(index/10)%10
-        s1.write('RotationVectors%s'%(str(index1)+str(index0)), R_gripper2base[i])
-        s2.write('TranslationVectors%s'%(str(index1)+str(index0)), t_gripper2base[i])
-    s1.release()
-    s2.release()
+    elif key_1 =='no':
+        pass
+    
+    
 if __name__ == '__main__':
     main()
 

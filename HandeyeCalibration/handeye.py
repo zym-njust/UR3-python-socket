@@ -1,22 +1,26 @@
-import yaml
+'''
+Date: 2023/3/9 first editing finished
+Author: Yiman Zhu
+Function: Read matrix from yaml file, then do handeyecalibration.
+
+'''
 import cv2
-from utils import *
-import pyrealsense2 as rs 
-from yaml_toolkit import *
+from toolkit.robot_toolkit import *
+from toolkit.yaml_toolkit import *
 import pdb
 
+# 检查n和urposition.py是否一致
+n = 15
 R_target2cam = []
 t_target2cam = []
 R_gripper2base = []
 t_gripper2base = []
 filename = 'handeye.yml'
-n = 15
 data1 = read_yaml('RotationVectors.yml')
 data2 = read_yaml('TranslationVectors.yml')
 data3 = read_yaml('R_gripper2base.yml')
 data4 = read_yaml('t_gripper2base.yml')
 
-# print(data)
 
 for index in range(1,n+1):
     index0 = index%10

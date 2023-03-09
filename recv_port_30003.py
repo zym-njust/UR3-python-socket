@@ -51,30 +51,9 @@ def main():
     #     print(value[1])
     # print()
     
-def get_calib_data():
-    print()
-    
-def forward_kine():
-    print()
-    
-def handeye():
-    cv2.calibrateHandEye()
-    
     
 if __name__ == '__main__':
-    # main()
-    # exit()
-    while True:
-        try:
-            # keyboard = input('input:')
-            # if keyboard == 'a':
-            z = z + 1
-            #     main()
-            # elif keyboard == 'q':
-            #     print('--------------Over--------------')
-            #     break
-            main()
-        except KeyboardInterrupt:
-            break
+    main()
+    exit()
 
 
